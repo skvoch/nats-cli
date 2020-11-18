@@ -1,1 +1,1 @@
-# nats-cli
+# Command line interface fot Nats Streaming
