@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"fmt"
+	"github.com/sirupsen/logrus"
 
 	"github.com/spf13/cobra"
 )
@@ -10,10 +10,10 @@ import (
 var publishCmd = &cobra.Command{
 	Use:   "publish",
 	Aliases: []string{"pub"},
-	Short: "A brief description of your command",
+	Short: "Publish message to subject",
 	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("publish called")
+		logrus.Error("publish command not implement yet")
 	},
 }
 
