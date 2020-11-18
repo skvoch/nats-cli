@@ -1,7 +1,7 @@
 # Command line interface fot NATS Streaming
 # Usage
 ```bash
-  nats-cli [command]
+nats-cli [command]
 
 Available Commands:
   help        Help about any command
@@ -14,4 +14,9 @@ Flags:
   -t, --toggle          Help message for toggle
 
 Use "nats-cli [command] --help" for more information about a command.
+```
+
+# Subscribe exmaple
+```bash
+nats-cli sub -a your-nats -c nats-cluster-id -s subject -d 24h
 ```
