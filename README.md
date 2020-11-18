@@ -1,1 +1,5 @@
-# Command line interface fot Nats Streaming
+# Command line interface fot NATS Streaming
+# How to use 
+```bash
+123
+```
