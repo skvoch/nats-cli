@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/sirupsen/logrus"
 	"github.com/skvoch/nats-cli/internal/template"
 	"github.com/spf13/cobra"
@@ -19,8 +20,8 @@ var templateVars TemplateVars
 // publishCmd represents the publish command
 var templateCmd = &cobra.Command{
 	Use:     "template",
-	Aliases: []string{"tmp"},
-	Short:   "Managing templates",
+	Aliases: []string{"tpl"},
+	Short:   "CRUD operations with templates",
 	Args:    cobra.MinimumNArgs(1),
 	Long:    ``,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -73,7 +74,7 @@ var templateCreate = &cobra.Command{
 var templateList = &cobra.Command{
 	Use:     "list",
 	Aliases: []string{"ls"},
-	Short:   "Managing templates",
+	Short:   "List templates",
 	Long:    ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		templates := template.List()

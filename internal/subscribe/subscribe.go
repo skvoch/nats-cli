@@ -3,12 +3,14 @@ package subscribe
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/sirupsen/logrus"
-	natsc "github.com/skvoch/nats-cli/internal/nats"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/sirupsen/logrus"
+
+	natsc "github.com/skvoch/nats-cli/internal/nats"
 )
 
 const (
@@ -35,6 +37,8 @@ func Run(address, clusterId, subject string, delta time.Duration) error {
 	for {
 		select {
 		case <-c:
+			close(c)
+
 			logrus.Info("exist")
 			return nil
 

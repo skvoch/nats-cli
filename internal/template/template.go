@@ -3,8 +3,9 @@ package template
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/shibukawa/configdir"
 	"path/filepath"
+
+	"github.com/shibukawa/configdir"
 )
 
 var templates Templates

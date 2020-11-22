@@ -1,11 +1,13 @@
 package cmd
 
 import (
+	"time"
+
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
+
 	"github.com/skvoch/nats-cli/internal/subscribe"
 	"github.com/skvoch/nats-cli/internal/template"
-	"github.com/spf13/cobra"
-	"time"
 )
 
 type SubscribeVars struct {
@@ -21,7 +23,7 @@ var subscribeVars SubscribeVars
 var subscribeTemplateCmd = &cobra.Command{
 	Use:     "template",
 	Aliases: []string{"tpl"},
-	Short:   "Use template for subscibe",
+	Short:   "Use template for subscribe",
 	Long:    ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		tpl, err := template.Get(subscribeVars.templateName)
@@ -58,10 +60,6 @@ var subscribeCmd = &cobra.Command{
 			return
 		}
 	},
-}
-
-func existWithError(err error) {
-	logrus.Fatal(err)
 }
 
 func init() {
