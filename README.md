@@ -1,12 +1,17 @@
 # Command line interface fot NATS Streaming
+# Features
+#### Templates
+Templates this is useful tool for saving your NATS settings, and reuse them with other commands.
+
 # Usage
 ```bash
-nats-cli [command]
+  nats-cli [command]
 
 Available Commands:
   help        Help about any command
   publish     Publish message to subject
   subscribe   Subscribe to subject
+  template    CRUD operations with templates
 
 Flags:
       --config string   config file (default is $HOME/.nats-cli.yaml)
@@ -19,4 +24,7 @@ Use "nats-cli [command] --help" for more information about a command.
 # Subscribe exmaple
 ```bash
 nats-cli sub -a your-nats -c nats-cluster-id -s subject -d 24h
+```
+```bash
+nats-cli sub tpl -n your-template-name -d 2h
 ```
