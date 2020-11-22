@@ -1,4 +1,4 @@
-# Command line interface fot NATS Streaming
+# Command line interface for NATS Streaming
 # Features
 #### Templates
 Templates this is useful tool for saving your NATS settings, and reuse them with other commands.
