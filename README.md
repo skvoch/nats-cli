@@ -1,5 +1,5 @@
 # Command line interface for NATS Streaming
-> :warning: **All versions has binary only for MacOS**: If you want to use nats-cli on another systems, you should to build binaries manually
+> :warning: **All versions has binaries only for MacOS**: If you want to use nats-cli on another systems, you should to build binaries manually
 
 # Features
 #### Templates
