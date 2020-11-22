@@ -25,9 +25,6 @@ Use "nats-cli [command] --help" for more information about a command.
 ```bash
 nats-cli sub -a your-nats-server -c nats-cluster-id -s subject -d 24h
 ```
-```bash
-nats-cli sub tpl -n your-template-name -d 2h
-```
 
 # Templates example
 #### List
