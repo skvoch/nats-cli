@@ -23,8 +23,26 @@ Use "nats-cli [command] --help" for more information about a command.
 
 # Subscribe exmaple
 ```bash
-nats-cli sub -a your-nats -c nats-cluster-id -s subject -d 24h
+nats-cli sub -a your-nats-server -c nats-cluster-id -s subject -d 24h
 ```
+```bash
+nats-cli sub tpl -n your-template-name -d 2h
+```
+
+# Templates example
+#### List
+```bash
+nats-cli template list
+```
+#### Create
+```bash
+nats-cli template create -a your-nats-server -c nats-cluster-id  -s subject -n template-name
+```
+#### Remove
+```bash
+nats-cli tpl remove -n template-name
+```
+#### Usage
 ```bash
 nats-cli sub tpl -n your-template-name -d 2h
 ```
