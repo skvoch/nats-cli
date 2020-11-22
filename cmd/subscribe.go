@@ -1,70 +1,63 @@
 package cmd
 
 import (
-	"bytes"
-	"encoding/json"
 	"github.com/sirupsen/logrus"
-	natsc "github.com/skvoch/nats-cli/internal/nats"
+	"github.com/skvoch/nats-cli/internal/subscribe"
+	"github.com/skvoch/nats-cli/internal/template"
 	"github.com/spf13/cobra"
-	"os"
-	"os/signal"
-	"syscall"
 	"time"
 )
 
-var natsServer string
-var natsSubject string
-var natsClusterID string
+type SubscribeVars struct {
+	natsServer     string
+	natsSubject    string
+	natsClusterID  string
+	templateName   string
+	startDeltaFrom time.Duration
+}
 
-var startDeltaFrom time.Duration
+var subscribeVars SubscribeVars
 
-const (
-	logNatsAddr = "nats"
-	logNatsSubject = "subject"
-)
-
-// subscribeCmd represents the subscribe command
-var subscribeCmd = &cobra.Command{
-	Use:   "subscribe",
-	Aliases: []string{"sub"},
-	Short: "Subscribe to subject",
-	Long: ``,
+var subscribeTemplateCmd = &cobra.Command{
+	Use:     "template",
+	Aliases: []string{"tpl"},
+	Short:   "Use template for subscibe",
+	Long:    ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		logrus.WithField(logNatsAddr, natsServer).Info("trying connect to nats...")
-		nats, err := natsc.Connect(natsServer,natsClusterID, clientID())
+		tpl, err := template.Get(subscribeVars.templateName)
 		if err != nil {
-			existWithError(err)
+			logrus.Error(err)
+			return
 		}
-		logrus.WithField(logNatsSubject, natsSubject).Info("trying subscribe to subject...")
-		messages, err := nats.Subscribe(natsSubject, startDeltaFrom);
-		if err != nil {
-			existWithError(err)
-		}
-		logrus.WithField(logNatsSubject, natsSubject).Info("successful subscription to subject!")
 
-
-		c := make(chan os.Signal)
-		signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-
-		for {
-			select {
-				case <-c:
-					logrus.Info("exist")
-					return
-
-				case msg := <-messages:
-					f := &bytes.Buffer{}
-					if err := json.Indent(f, msg, "", "  "); err != nil {
-						logrus.Error(err)
-					}
-					logrus.Info(f)
-			}
+		if err := subscribe.Run(
+			tpl.NatsServer,
+			tpl.NatsClusterID,
+			tpl.NatsSubject,
+			subscribeVars.startDeltaFrom); err != nil {
+			logrus.Error(err)
+			return
 		}
 	},
 }
 
-func clientID() string {
-	return "nats-cli"
+// subscribeCmd represents the subscribe command
+var subscribeCmd = &cobra.Command{
+	Use:     "subscribe",
+	Aliases: []string{"sub"},
+	Short:   "Subscribe to subject",
+	Long:    ``,
+	Args:    cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := subscribe.Run(
+			subscribeVars.natsServer,
+			subscribeVars.natsClusterID,
+			subscribeVars.natsSubject,
+			subscribeVars.startDeltaFrom); err != nil {
+			logrus.Error(err)
+			return
+		}
+	},
 }
 
 func existWithError(err error) {
@@ -72,11 +65,18 @@ func existWithError(err error) {
 }
 
 func init() {
-	subscribeCmd.Flags().StringVarP(&natsServer,"addr", "a",  "","NATS server addr")
-	subscribeCmd.Flags().StringVarP(&natsSubject,"subject", "s",  "","subject name")
-	subscribeCmd.Flags().StringVarP(&natsClusterID,"cluster-id", "c",  "","cluster id")
-	subscribeCmd.Flags().DurationVarP(&startDeltaFrom,"delta-time", "d",  0,"cluster id")
+	subscribeTemplateCmd.Flags().StringVarP(&subscribeVars.templateName, "name", "n", "", "template name")
+	subscribeTemplateCmd.Flags().DurationVarP(&subscribeVars.startDeltaFrom, "delta-time", "d", 0, "cluster id")
+	if err := subscribeTemplateCmd.MarkFlagRequired("name"); err != nil {
+		logrus.Fatal(err)
+	}
 
+	subscribeCmd.AddCommand(subscribeTemplateCmd)
+
+	subscribeCmd.Flags().StringVarP(&subscribeVars.natsServer, "addr", "a", "", "NATS server addr")
+	subscribeCmd.Flags().StringVarP(&subscribeVars.natsSubject, "subject", "s", "", "subject name")
+	subscribeCmd.Flags().StringVarP(&subscribeVars.natsClusterID, "cluster-id", "c", "", "cluster id")
+	subscribeCmd.Flags().DurationVarP(&subscribeVars.startDeltaFrom, "delta-time", "d", 0, "cluster id")
 
 	if err := subscribeCmd.MarkFlagRequired("addr"); err != nil {
 		logrus.Fatal(err)
