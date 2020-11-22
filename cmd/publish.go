@@ -2,16 +2,15 @@ package cmd
 
 import (
 	"github.com/sirupsen/logrus"
-
 	"github.com/spf13/cobra"
 )
 
 // publishCmd represents the publish command
 var publishCmd = &cobra.Command{
-	Use:   "publish",
+	Use:     "publish",
 	Aliases: []string{"pub"},
-	Short: "Publish message to subject",
-	Long: ``,
+	Short:   "Publish message to subject",
+	Long:    ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		logrus.Error("publish command not implement yet")
 	},

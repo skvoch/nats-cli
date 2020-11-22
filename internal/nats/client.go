@@ -3,17 +3,18 @@ package natsc
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/nats-io/stan.go"
 	"time"
+
+	"github.com/nats-io/stan.go"
 )
 
 type Client struct {
 	conn stan.Conn
-	sub stan.Subscription
+	sub  stan.Subscription
 }
 
-func Connect(addr,clusterID,clientID string) (*Client, error) {
-	conn, err := stan.Connect(clusterID,clientID, stan.NatsURL(addr))
+func Connect(addr, clusterID, clientID string) (*Client, error) {
+	conn, err := stan.Connect(clusterID, clientID, stan.NatsURL(addr))
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to nats: %w", err)
 	}
@@ -23,12 +24,12 @@ func Connect(addr,clusterID,clientID string) (*Client, error) {
 	}, nil
 }
 
-func (c *Client) Subscribe(subject string, delta time.Duration) (chan json.RawMessage,error){
+func (c *Client) Subscribe(subject string, delta time.Duration) (chan json.RawMessage, error) {
 	out := make(chan json.RawMessage, 1)
 
 	sub, err := c.conn.Subscribe(subject, func(msg *stan.Msg) {
 		out <- msg.Data
-	},	stan.StartAtTimeDelta(delta))
+	}, stan.StartAtTimeDelta(delta))
 
 	if err != nil {
 		return nil, fmt.Errorf("failed to subscrbie to subject %s: %w", subject, err)
