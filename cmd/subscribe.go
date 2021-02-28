@@ -49,7 +49,7 @@ var subscribeCmd = &cobra.Command{
 	Aliases: []string{"sub"},
 	Short:   "Subscribe to subject",
 	Long:    ``,
-	Args:    cobra.MinimumNArgs(1),
+	Args:    cobra.MinimumNArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := subscribe.Run(
 			subscribeVars.natsServer,
