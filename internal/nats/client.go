@@ -24,6 +24,27 @@ func Connect(addr, clusterID, clientID string) (*Client, error) {
 	}, nil
 }
 
+func (c *Client) Publish(subject string, message []byte, validateJSON bool) error {
+	if validateJSON {
+		if err := c.Validate(message); err != nil {
+			return fmt.Errorf("failed to validate json message: %w", err)
+		}
+	}
+	if err := c.conn.Publish(subject, message); err != nil {
+		return fmt.Errorf("failed to publish message: %w", err)
+	}
+
+	return nil
+}
+
+func (c Client) Validate(data []byte) error {
+	var j map[string]interface{}
+	if err := json.Unmarshal(data, &j); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (c *Client) Subscribe(subject string, delta time.Duration) (chan json.RawMessage, error) {
 	out := make(chan json.RawMessage, 1)
 

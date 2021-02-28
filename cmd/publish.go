@@ -2,30 +2,57 @@ package cmd
 
 import (
 	"github.com/sirupsen/logrus"
+	"github.com/skvoch/nats-cli/internal/publish"
 	"github.com/spf13/cobra"
 )
+
+var publishVars struct {
+	natsServer    string
+	natsSubject   string
+	natsClusterID string
+	templateName  string
+	message       string
+}
 
 // publishCmd represents the publish command
 var publishCmd = &cobra.Command{
 	Use:     "publish",
 	Aliases: []string{"pub"},
-	Short:   "Publish message to subject",
+	Short:   "Publish to subject",
 	Long:    ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		logrus.Error("publish command not implement yet")
+		if err := publish.Run(
+			publishVars.natsServer,
+			publishVars.natsClusterID,
+			publishVars.natsSubject,
+			[]byte(publishVars.message), true); err != nil {
+			logrus.Error(err)
+			return
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(publishCmd)
 
-	// Here you will define your flags and configuration settings.
+	publishCmd.Flags().StringVarP(&publishVars.natsServer, "addr", "a", "", "NATS server addr")
+	publishCmd.Flags().StringVarP(&publishVars.natsSubject, "subject", "s", "", "subject name")
+	publishCmd.Flags().StringVarP(&publishVars.natsClusterID, "cluster-id", "c", "", "cluster id")
+	publishCmd.Flags().StringVarP(&publishVars.message, "message", "m", "", "JSON message")
 
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// publishCmd.PersistentFlags().String("foo", "", "A help for foo")
+	if err := publishCmd.MarkFlagRequired("addr"); err != nil {
+		logrus.Fatal(err)
+	}
 
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// publishCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	if err := publishCmd.MarkFlagRequired("subject"); err != nil {
+		logrus.Fatal(err)
+	}
+
+	if err := publishCmd.MarkFlagRequired("cluster-id"); err != nil {
+		logrus.Fatal(err)
+	}
+
+	if err := publishCmd.MarkFlagRequired("message"); err != nil {
+		logrus.Fatal(err)
+	}
 }
