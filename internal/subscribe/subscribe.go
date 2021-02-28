@@ -3,6 +3,7 @@ package subscribe
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/skvoch/nats-cli/pkg/constants"
 	"os"
 	"os/signal"
 	"syscall"
@@ -20,7 +21,7 @@ const (
 
 func Run(address, clusterId, subject string, delta time.Duration) error {
 	logrus.WithField(logNatsAddr, address).Info("trying connect to nats...")
-	nats, err := natsc.Connect(address, clusterId, clientID())
+	nats, err := natsc.Connect(address, clusterId, constants.ClientID)
 	if err != nil {
 		return err
 	}
@@ -50,8 +51,4 @@ func Run(address, clusterId, subject string, delta time.Duration) error {
 			logrus.Info(f)
 		}
 	}
-}
-
-func clientID() string {
-	return "nats-cli"
 }

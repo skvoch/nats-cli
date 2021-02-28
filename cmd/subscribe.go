@@ -10,15 +10,13 @@ import (
 	"github.com/skvoch/nats-cli/internal/template"
 )
 
-type SubscribeVars struct {
+var subscribeVars struct {
 	natsServer     string
 	natsSubject    string
 	natsClusterID  string
 	templateName   string
 	startDeltaFrom time.Duration
 }
-
-var subscribeVars SubscribeVars
 
 var subscribeTemplateCmd = &cobra.Command{
 	Use:     "template",
@@ -74,7 +72,7 @@ func init() {
 	subscribeCmd.Flags().StringVarP(&subscribeVars.natsServer, "addr", "a", "", "NATS server addr")
 	subscribeCmd.Flags().StringVarP(&subscribeVars.natsSubject, "subject", "s", "", "subject name")
 	subscribeCmd.Flags().StringVarP(&subscribeVars.natsClusterID, "cluster-id", "c", "", "cluster id")
-	subscribeCmd.Flags().DurationVarP(&subscribeVars.startDeltaFrom, "delta-time", "d", 0, "cluster id")
+	subscribeCmd.Flags().DurationVarP(&subscribeVars.startDeltaFrom, "delta-time", "d", 0, "delta-time")
 
 	if err := subscribeCmd.MarkFlagRequired("addr"); err != nil {
 		logrus.Fatal(err)
