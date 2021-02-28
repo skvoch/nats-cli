@@ -1,4 +1,6 @@
 # Command line interface for NATS Streaming
+> :warning: **All versions have MacOS binaries only**: If you want to use nats-cli on other systems, you should to build the binaries manually
+
 # Features
 #### Templates
 Templates this is useful tool for saving your NATS settings, and reuse them with other commands.
