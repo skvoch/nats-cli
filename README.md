@@ -3,17 +3,19 @@
 
 # Features
 #### Templates
-Templates this is useful tool for saving your NATS settings, and reuse them with other commands.
-
+* Publishing 
+* Subscribing
+* Templates this is a useful tool for saving your NATS settings, and reuse them with other commands.
 # Usage
 ```bash
+Usage:
   nats-cli [command]
 
 Available Commands:
   help        Help about any command
-  publish     Publish message to subject
+  publish     Publish to subject
   subscribe   Subscribe to subject
-  template    CRUD operations with templates
+  template    Manage templates
 
 Flags:
       --config string   config file (default is $HOME/.nats-cli.yaml)
@@ -23,11 +25,16 @@ Flags:
 Use "nats-cli [command] --help" for more information about a command.
 ```
 
-# Subscribe exmaple
+# Subscribe example
 ```bash
 nats-cli sub -a your-nats-server -c nats-cluster-id -s subject -d 24h
 ```
 
+# Publish example
+```bash
+nats-cli pub -a your-nats-server -c nats-cluster-id -s subject -m '{"json":"here"}'
+
+```
 # Templates example
 #### List
 ```bash
@@ -44,4 +51,7 @@ nats-cli tpl remove -n template-name
 #### Usage
 ```bash
 nats-cli sub tpl -n your-template-name -d 2h
+```
+```bash
+nats-cli pub tpl -n your-template-name -m '{"json":"here"}'
 ```
