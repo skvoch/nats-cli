@@ -14,7 +14,7 @@ var cfgFile string
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "nats-cli",
-	Short: "This is tool for interacting with NATS from CLI",
+	Short: "The tool for interacting with NATS from command-line interface",
 	Long:  ``,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:

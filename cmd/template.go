@@ -21,7 +21,7 @@ var templateVars TemplateVars
 var templateCmd = &cobra.Command{
 	Use:     "template",
 	Aliases: []string{"tpl"},
-	Short:   "CRUD operations with templates",
+	Short:   "Manage templates",
 	Args:    cobra.MinimumNArgs(1),
 	Long:    ``,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -93,8 +93,8 @@ var templateList = &cobra.Command{
 
 func init() {
 	templateCmd.AddCommand(templateList)
-
 	templateCmd.AddCommand(templateCreate)
+
 	templateCreate.Flags().StringVarP(&templateVars.name, "name", "n", "", "template name")
 	templateCreate.Flags().StringVarP(&templateVars.natsServer, "addr", "a", "", "NATS server addr")
 	templateCreate.Flags().StringVarP(&templateVars.natsSubject, "subject", "s", "", "subject name")
