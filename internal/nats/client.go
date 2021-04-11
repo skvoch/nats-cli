@@ -38,10 +38,12 @@ func (c *Client) Publish(subject string, message []byte, validateJSON bool) erro
 }
 
 func (c Client) Validate(data []byte) error {
-	var j map[string]interface{}
-	if err := json.Unmarshal(data, &j); err != nil {
-		return err
+	isValid := json.Valid(data)
+
+	if !isValid {
+		return fmt.Errorf("invalid json message")
 	}
+
 	return nil
 }
 
