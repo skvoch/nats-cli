@@ -19,9 +19,13 @@ const (
 	logNatsSubject = "subject"
 )
 
-func Run(address, clusterId, subject string, delta time.Duration) error {
+func Run(address, clusterId, clientId, subject string, delta time.Duration) error {
+	if clientId == "" {
+		clientId = constants.ClientID
+	}
+
 	logrus.WithField(logNatsAddr, address).Info("trying connect to nats...")
-	nats, err := natsc.Connect(address, clusterId, constants.ClientID)
+	nats, err := natsc.Connect(address, clusterId, clientId)
 	if err != nil {
 		return err
 	}
@@ -32,7 +36,7 @@ func Run(address, clusterId, subject string, delta time.Duration) error {
 	}
 	logrus.WithField(logNatsSubject, subject).Info("successful subscription to subject!")
 
-	c := make(chan os.Signal)
+	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 
 	for {
