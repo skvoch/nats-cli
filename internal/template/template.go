@@ -14,6 +14,7 @@ type Item struct {
 	NatsServer    string
 	NatsSubject   string
 	NatsClusterID string
+	NatsClientID  string
 }
 
 type Templates struct {
