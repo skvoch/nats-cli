@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-
 	"github.com/sirupsen/logrus"
 	"github.com/skvoch/nats-cli/internal/template"
+	"github.com/skvoch/nats-cli/pkg/constants"
 	"github.com/spf13/cobra"
 )
 
@@ -12,6 +12,7 @@ type TemplateVars struct {
 	natsServer    string
 	natsSubject   string
 	natsClusterID string
+	natsClientID  string
 	name          string
 }
 
@@ -57,6 +58,7 @@ var templateCreate = &cobra.Command{
 		if err := template.Add(templateVars.name, template.Item{
 			NatsClusterID: templateVars.natsClusterID,
 			NatsServer:    templateVars.natsServer,
+			NatsClientID:  templateVars.natsClientID,
 			NatsSubject:   templateVars.natsSubject,
 		}); err != nil {
 			logrus.Error(err)
@@ -80,8 +82,8 @@ var templateList = &cobra.Command{
 		templates := template.List()
 
 		for name, item := range templates.Values {
-			str := fmt.Sprintf(`name: %s | server: %s | cluster-id: %s | subject: %s`,
-				name, item.NatsServer, item.NatsClusterID, item.NatsSubject)
+			str := fmt.Sprintf(`name: %s | server: %s | cluster-id: %s | client-id: %s | subject: %s`,
+				name, item.NatsServer, item.NatsClusterID, item.NatsClientID, item.NatsSubject)
 			logrus.Info(str)
 		}
 
@@ -99,6 +101,7 @@ func init() {
 	templateCreate.Flags().StringVarP(&templateVars.natsServer, "addr", "a", "", "NATS server addr")
 	templateCreate.Flags().StringVarP(&templateVars.natsSubject, "subject", "s", "", "subject name")
 	templateCreate.Flags().StringVarP(&templateVars.natsClusterID, "cluster-id", "c", "", "cluster id")
+	templateCreate.Flags().StringVarP(&templateVars.natsClientID, "client-id", "i", constants.ClientID, "client id")
 
 	if err := templateCreate.MarkFlagRequired("addr"); err != nil {
 		logrus.Fatal(err)
